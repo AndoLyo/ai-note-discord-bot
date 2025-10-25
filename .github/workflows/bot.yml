@@ -16,6 +16,8 @@ on:
 jobs:
   run-bot:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout code
@@ -35,11 +37,6 @@ jobs:
           DISCORD_BOT_TOKEN: ${{ secrets.DISCORD_BOT_TOKEN }}
           DISCORD_CHANNEL_ID: ${{ secrets.DISCORD_CHANNEL_ID }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          REDDIT_CLIENT_ID: ${{ secrets.REDDIT_CLIENT_ID }}
-          REDDIT_CLIENT_SECRET: ${{ secrets.REDDIT_CLIENT_SECRET }}
-          REDDIT_USERNAME: ${{ secrets.REDDIT_USERNAME }}
-          REDDIT_PASSWORD: ${{ secrets.REDDIT_PASSWORD }}
-          HUGGINGFACE_API_KEY: ${{ secrets.HUGGINGFACE_API_KEY }}
           POST_INTERVAL_MINUTES: 0
           MAX_POSTS_PER_RUN: 5
         run: |

@@ -5,22 +5,26 @@ import fetch from 'node-fetch';
  */
 export async function fetchNoteContent() {
   try {
-    // AI関連のハッシュタグで検索
-    const hashtags = ['AI', 'ChatGPT', 'プロンプト', '生成AI', 'AIとやってみた'];
+    // AI関連のハッシュタグで検索（主要なもののみ）
+    const hashtags = ['AI', 'ChatGPT', 'プロンプト'];
     const allArticles = [];
+    const seenUrls = new Set();
 
     // 各ハッシュタグから人気記事を取得
     for (const hashtag of hashtags) {
       const articles = await fetchHashtagTrendingNotes(hashtag);
-      allArticles.push(...articles);
+
+      // 重複URLを除外しながら追加
+      for (const article of articles) {
+        if (!seenUrls.has(article.url)) {
+          seenUrls.add(article.url);
+          allArticles.push(article);
+        }
+      }
     }
 
-    // スキ数でソート（重複除外）
-    const uniqueArticles = Array.from(
-      new Map(allArticles.map(item => [item.url, item])).values()
-    );
-
-    const sortedArticles = uniqueArticles
+    // スキ数でソート
+    const sortedArticles = allArticles
       .sort((a, b) => b.score - a.score)
       .slice(0, 20);
 
