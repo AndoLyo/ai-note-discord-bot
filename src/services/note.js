@@ -6,7 +6,7 @@ import fetch from 'node-fetch';
 export async function fetchNoteContent() {
   try {
     // AI関連のハッシュタグで検索（主要なもののみ）
-    const hashtags = ['AI', 'ChatGPT', 'プロンプト'];
+    const hashtags = ['StableDiffusion', '画像生成AI', 'プロンプト', 'ChatGPT', 'Gemini', 'Claude'];
     const allArticles = [];
     const seenUrls = new Set();
 
@@ -64,7 +64,7 @@ async function fetchHashtagTrendingNotes(hashtag) {
 
     const articles = data.data.notes.contents
       .filter(note => note && note.key && (note.name || note.body))
-      .slice(0, 5) // 各ハッシュタグから5件
+      .slice(0, 2) // 各ハッシュタグから5件
       .map(note => {
         const userUrlname = note.user ? note.user.urlname : 'unknown';
         return {
