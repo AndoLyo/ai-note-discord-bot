@@ -1,4 +1,5 @@
 import fetch from 'node-fetch';
+import { isRelevantContent } from './gemini.js';
 
 /**
  * note.comからAI・プロンプト関連のトレンド記事を取得
@@ -23,18 +24,39 @@ export async function fetchNoteContent() {
       }
     }
 
+    // Geminiで関連性判定とフィルタリング
+    console.log(`[Note] ${allArticles.length}件の候補を関連性チェック中...`);
+    const relevantArticles = [];
+    
+    for (const article of allArticles) {
+      const isRelevant = await isRelevantContent(article);
+      if (isRelevant) {
+        relevantArticles.push(article);
+      }
+      
+      // API呼び出し間に少し待機（レート制限対策）
+      await sleep(1000);
+    }
+
     // スキ数でソート
-    const sortedArticles = allArticles
+    const sortedArticles = relevantArticles
       .sort((a, b) => b.score - a.score)
       .slice(0, 20);
 
-    console.log(`[Note] ${sortedArticles.length}件のトレンドコンテンツを取得しました`);
+    console.log(`[Note] ${sortedArticles.length}件の関連コンテンツを取得しました`);
     return sortedArticles;
 
   } catch (error) {
     console.error('[Note] エラー:', error.message);
     return [];
   }
+}
+
+/**
+ * スリープ関数
+ */
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 /**
