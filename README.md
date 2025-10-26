@@ -4,11 +4,11 @@ note.comからAI・プロンプト関連のトレンド記事を自動収集し�
 
 ## 特徴
 
-- **note.comから収集**: AI、ChatGPT、プロンプト、生成AI関連のトレンド記事を自動取得
+- **note.comから収集**: StableDiffusion、画像生成AI、プロンプト、ChatGPT、Gemini、Claude関連のトレンド記事を自動取得
 - **AI要約**: Gemini 2.5 Flashで魅力的な要約を生成
 - **人気順ランキング**: スキ数（いいね）が多い順で投稿
 - **重複チェック**: 既に投稿したコンテンツは除外
-- **GitHub Actions**: 1時間ごとに自動実行
+- **GitHub Actions**: 3時間ごとに自動実行
 
 ## セットアップ手順
 
@@ -56,7 +56,7 @@ note.comからAI・プロンプト関連のトレンド記事を自動収集し�
 
 1. リポジトリの「Actions」タブを開く
 2. 「I understand my workflows, go ahead and enable them」をクリック
-3. ワークフローが1時間ごとに自動実行されます
+3. ワークフローが3時間ごとに自動実行されます
 
 ## ローカル実行
 
@@ -102,7 +102,8 @@ npm start
 
 ```yaml
 schedule:
-  - cron: '0 */2 * * *'  # 2時間ごとに実行
+  - cron: '0 */3 * * *'  # 3時間ごとに実行（現在の設定）
+  # - cron: '0 */2 * * *'  # 2時間ごとに実行
 ```
 
 ### 要約プロンプトをカスタマイズ
@@ -112,9 +113,14 @@ schedule:
 ### 対象ハッシュタグを変更
 
 [src/services/note.js](src/services/note.js) の`hashtags`配列を編集してください。
+各ハッシュタグから2件ずつトレンド記事を取得します。
 
 ```javascript
-const hashtags = ['AI', 'ChatGPT', 'プロンプト', '生成AI', 'AIとやってみた'];
+// 現在の設定
+const hashtags = ['StableDiffusion', '画像生成AI', 'プロンプト', 'ChatGPT', 'Gemini', 'Claude'];
+
+// カスタマイズ例
+// const hashtags = ['AI', '生成AI', 'プログラミング'];
 ```
 
 ## トラブルシューティング
